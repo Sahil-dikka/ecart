@@ -2,6 +2,7 @@ package com.example.ecart.Controller;
 
 import com.example.ecart.model.Category;
 import com.example.ecart.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,32 +28,20 @@ public class CategoryController {
     }
 
     @PostMapping("api/public/category")
-    public ResponseEntity<String> createCategory(@RequestBody Category category){
+    public ResponseEntity<String> createCategory(@Valid @RequestBody Category category){
         categoryService.createCategory(category);
         return new ResponseEntity<>("Category created successfully",HttpStatus.CREATED);
     }
 
     @DeleteMapping("api/admin/category/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable long id){
-
-        try{
             String result  = categoryService.deleteCategory(id);
             return new ResponseEntity<>(result, HttpStatus.OK);
-        }catch(ResponseStatusException e){
-            return new ResponseEntity<>(e.getReason(),e.getStatusCode());
-        }
-
     }
 
     @PutMapping("api/admin/category/{id}")
     public ResponseEntity<String> updateCategory(@PathVariable long id,@RequestBody Category category){
-
-        try{
             String result = categoryService.updateCategory(id,category);
             return new ResponseEntity<>(result,HttpStatus.OK);
-
-        }catch(ResponseStatusException e){
-            return new ResponseEntity<>(e.getReason(),e.getStatusCode());
-        }
     }
 }
